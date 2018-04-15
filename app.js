@@ -31,4 +31,4 @@ socket.on('client transaction', function(data) {
     }
 });
 
-vorpal.use(client, { 'blockchain': blockchain, 'transactions': transactions });
+vorpal.use(client, { 'blockchain': blockchain });

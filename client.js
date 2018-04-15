@@ -11,9 +11,9 @@ function client(vorpal, data) {
         .use(discoverCommand, p2p)
         .use(blockchainCommand, data.blockchain)
         .use(peersCommand, p2p)
-        .use(mineCommand, { 'p2p': p2p, 'blockchain': data.blockchain, 'transactions': data.transactions })
+        .use(mineCommand, { 'p2p': p2p, 'blockchain': data.blockchain })
         .use(openCommand, p2p)
-        .use(transactionsCommand, data.transactions)
+        .use(transactionsCommand)
         .use(welcome)
         .delimiter('BMU-Blockchain \\O/→>>')
         .show()
@@ -83,7 +83,8 @@ function mineCommand(vorpal, funcs) {
         .command('mine', 'Mine a new block in chronological order. Eg: mine')
         .alias('m')
         .action(function(args, callback) {
-            var transactions = funcs.transactions;
+            var transactionsFile = fs.readFileSync('transactions.json');
+            var transactions = JSON.parse(transactionsFile);
             var blockchain = funcs.blockchain;
             var p2p = funcs.p2p;
             if (transactions.length == 0) {
@@ -116,11 +117,13 @@ function openCommand(vorpal, p2p) {
         })
 }
 
-function transactionsCommand(vorpal, transactions) {
+function transactionsCommand(vorpal) {
     vorpal
         .command('transactions', 'Show the un-mined transactions.')
         .alias('t')
         .action(function(args, callback) {
+            var transactionsFile = fs.readFileSync('transactions.json');
+            var transactions = JSON.parse(transactionsFile);
             this.log(transactions);
             callback();
         })
