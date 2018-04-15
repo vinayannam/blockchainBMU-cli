@@ -61,7 +61,23 @@ function blockchainCommand(vorpal, blockchain) {
         .command('blockchain', 'See the current state of the blockchain.')
         .alias('bc')
         .action(function(args, callback) {
-            this.log(blockchain)
+            this.log(':--- Blockchain ---:');
+            for (var i = 1; i < blockchain.blockchain.length; i++) {
+                var block = blockchain.blockchain[i];
+                this.log();
+                this.log('Index:          ', block.index);
+                this.log('Previous Hash:  ', block.previousHash);
+                this.log('Timestamp:      ', block.timestamp);
+                this.log('Data: {');
+                var data = JSON.parse(block.data);
+                this.log('  Sender:      ', data.sender);
+                this.log('  Receiver:    ', data.reciever);
+                this.log('  Amount:      ', data.amount);
+                this.log('  Timestamp:   ', data.timestamp);
+                this.log('}');
+                this.log('Hash:           ', block.hash);
+                this.log('Nonce:          ', block.nonce);
+            }
             callback();
         })
 }
@@ -124,7 +140,16 @@ function transactionsCommand(vorpal) {
         .action(function(args, callback) {
             var transactionsFile = fs.readFileSync('transactions.json');
             var transactions = JSON.parse(transactionsFile);
-            this.log(transactions);
+            this.log(':--- Transactions ---:');
+            for (var i = 0; i < transactions.length; i++) {
+                this.log();
+                var transaction = transactions[i];
+                this.log('Index:    ', i + 1);
+                this.log('Sender:   ', transaction.sender);
+                this.log('Receiver: ', transaction.reciever);
+                this.log('Amount:   ', transaction.amount);
+                this.log('Timestamp:   ', transaction.timestamp);
+            }
             callback();
         })
 }
