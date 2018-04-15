@@ -14,9 +14,6 @@ if (JSON.parse(blockchainFile).length > 1) {
     fs.writeFile("blockchain.json", JSON.stringify(blockchain.blockchain), "utf8", function() {});
 }
 
-var transactionFile = fs.readFileSync('transactions.json');
-var transactions = JSON.parse(transactionFile);
-
 var socket = io.connect('http://10.7.2.96:3100');
 socket.emit('client');
 
@@ -24,6 +21,8 @@ socket.on('reconnect', function() {
     socket.emit('client');
 })
 socket.on('client transaction', function(data) {
+    var transactionFile = fs.readFileSync('transactions.json');
+    var transactions = JSON.parse(transactionFile);
     var keypair = ec.keyFromPublic(data.sender, 'hex');
     if (keypair.verify(data.amount, data.sign) == true) {
         transactions.push(data);
