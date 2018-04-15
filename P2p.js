@@ -119,10 +119,12 @@ class PeerToPeer {
         var transactionFile = fs.readFileSync('transactions.json');
         var transactions = JSON.parse(transactionFile);
         for (var i = 0; i < transactions.length; i++) {
-            console.log(transactions[i].sign, JSON.parse(receivedBlock.data).sign)
-                // if (transactions[i].sign == JSON.parse(receivedBlock.data).sign && transactions[i].timestamp == JSON.parse(receivedBlock.data).timestamp) {
-                //     transactions.splice(i, 1);
-                // }
+            if (transactions[i].sign === JSON.parse(receivedBlock.data).sign) {
+                console.log(transactions[i].sign, JSON.parse(receivedBlock.data).sign)
+            }
+            // if (transactions[i].sign == JSON.parse(receivedBlock.data).sign && transactions[i].timestamp == JSON.parse(receivedBlock.data).timestamp) {
+            //     transactions.splice(i, 1);
+            // }
         }
         fs.writeFile("transactions.json", JSON.stringify(transactions), "utf8", function() {});
         if (latestBlock.hash === receivedBlock.previousHash) {
