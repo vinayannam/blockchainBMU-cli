@@ -1,0 +1,26 @@
+{
+    "name": "blockchain-cli",
+    "version": "1.0.0",
+    "description": "A BMU Blockchain client",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vinayannam/blockchainBMU-cli.git"
+    },
+    "author": "vinay",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/vinayannam/blockchainBMU-cli/issues"
+    },
+    "homepage": "https://github.com/vinayannam/blockchainBMU-cli#readme",
+    "dependencies": {
+        "elliptic": "^6.4.0",
+        "peer-exchange": "^2.2.0",
+        "socket.io": "^2.0.4",
+        "vorpal": "^1.12.0",
+        "wrtc": "0.0.67"
+    }
+}
