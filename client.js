@@ -2,6 +2,7 @@ const P2p = require("./P2p.js");
 var fs = require("fs");
 var EC = require('elliptic').ec;
 var ec = new EC('secp256k1');
+var colors = require('colors');
 
 
 function client(vorpal, data) {
@@ -15,15 +16,15 @@ function client(vorpal, data) {
         .use(openCommand, p2p)
         .use(transactionsCommand)
         .use(welcome)
-        .delimiter('BMU-Blockchain \\O/→>>')
+        .delimiter('BMU-Blockchain \\O/→>>'.red)
         .show()
 }
 
 module.exports = client;
 
 function welcome(vorpal) {
-    vorpal.log("Welcome to BMU Blockchain CLI!");
     vorpal.exec("help");
+    vorpal.log("Welcome to BMU Blockchain CLI!\n".magenta.bold);
 }
 
 function connectCommand(vorpal, p2p) {
@@ -61,23 +62,36 @@ function blockchainCommand(vorpal, blockchain) {
         .command('blockchain', 'See the current state of the blockchain.')
         .alias('bc')
         .action(function(args, callback) {
-            this.log(':--- Blockchain ---:');
+            this.log(':--- Blockchain ---:'.yellow);
+            for (var i = 0; i <= 0; i++) {
+                var block = blockchain.blockchain[i];
+                this.log();
+                this.log('Index: '.cyan, String(block.index).white);
+                this.log('Previous Hash: '.cyan, String(block.previousHash).white);
+                this.log('Timestamp: '.cyan, String(block.timestamp).white);
+                this.log('Data: {'.cyan);
+                this.log('  Genesis : '.magenta, String(block.data).white);
+                this.log(' }'.cyan);
+                this.log('Hash: '.cyan, String(block.hash).white);
+                this.log('Nonce: '.cyan, String(block.nonce).white);
+            }
             for (var i = 1; i < blockchain.blockchain.length; i++) {
                 var block = blockchain.blockchain[i];
                 this.log();
-                this.log('Index:          ', block.index);
-                this.log('Previous Hash:  ', block.previousHash);
-                this.log('Timestamp:      ', block.timestamp);
-                this.log('Data: {');
+                this.log('Index: '.cyan, String(block.index).white);
+                this.log('Previous Hash: '.cyan, String(block.previousHash).white);
+                this.log('Timestamp: '.cyan, String(block.timestamp).white);
+                this.log('Data: {'.cyan);
                 var data = JSON.parse(block.data);
-                this.log('  Sender:      ', data.sender);
-                this.log('  Receiver:    ', data.reciever);
-                this.log('  Amount:      ', data.amount);
-                this.log('  Timestamp:   ', data.timestamp);
-                this.log('}');
-                this.log('Hash:           ', block.hash);
-                this.log('Nonce:          ', block.nonce);
+                this.log('  Sender: '.magenta, String(data.sender).white);
+                this.log('  Receiver: '.magenta, String(data.reciever).white);
+                this.log('  Amount: '.magenta, String(data.amount).white);
+                this.log('  Timestamp: '.magenta, String(data.timestamp).white);
+                this.log('}'.cyan);
+                this.log('Hash: '.cyan, String(block.hash).white);
+                this.log('Nonce: '.cyan, String(block.nonce).white);
             }
+            this.log();
             callback();
         })
 }
@@ -140,16 +154,17 @@ function transactionsCommand(vorpal) {
         .action(function(args, callback) {
             var transactionsFile = fs.readFileSync('transactions.json');
             var transactions = JSON.parse(transactionsFile);
-            this.log(':--- Transactions ---:');
+            this.log(':--- Transactions ---:'.yellow);
             for (var i = 0; i < transactions.length; i++) {
                 this.log();
                 var transaction = transactions[i];
-                this.log('Index:    ', i + 1);
-                this.log('Sender:   ', transaction.sender);
-                this.log('Receiver: ', transaction.reciever);
-                this.log('Amount:   ', transaction.amount);
-                this.log('Timestamp:   ', transaction.timestamp);
+                this.log('Index: '.cyan, String(i + 1).white);
+                this.log('Sender: '.cyan, String(transaction.sender).white);
+                this.log('Receiver: '.cyan, String(transaction.reciever).white);
+                this.log('Amount: '.cyan, String(transaction.amount).white);
+                this.log('Timestamp: '.cyan, String(transaction.timestamp).white);
             }
+            this.log();
             callback();
         })
 }
