@@ -9,9 +9,7 @@ function client(vorpal, data) {
     const p2p = new P2p(data.blockchain);
     vorpal
         .use(connectCommand, p2p)
-        .use(discoverCommand, p2p)
         .use(blockchainCommand, data.blockchain)
-        .use(peersCommand, p2p)
         .use(mineCommand, { 'p2p': p2p, 'blockchain': data.blockchain })
         .use(openCommand, p2p)
         .use(transactionsCommand)
@@ -38,20 +36,6 @@ function connectCommand(vorpal, p2p) {
                 } catch (err) {
                     this.log(err);
                 }
-            }
-            callback();
-        })
-}
-
-function discoverCommand(vorpal, p2p) {
-    vorpal
-        .command('discover', 'Discover new peers from your connected peers.')
-        .alias('d')
-        .action(function(args, callback) {
-            try {
-                p2p.discoverPeers();
-            } catch (err) {
-                this.log(err);
             }
             callback();
         })
@@ -92,18 +76,6 @@ function blockchainCommand(vorpal, blockchain) {
                 this.log('Nonce: '.cyan, String(block.nonce).white);
             }
             this.log();
-            callback();
-        })
-}
-
-function peersCommand(vorpal, p2p) {
-    vorpal
-        .command('peers', 'Get the list of connected peers.')
-        .alias('p')
-        .action(function(args, callback) {
-            p2p.peers.forEach(peer => {
-                this.log(`${peer.pxpPeer.socket._host} \n`)
-            }, this)
             callback();
         })
 }
