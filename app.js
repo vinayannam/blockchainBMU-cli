@@ -6,10 +6,16 @@ const blockchain = new Blockchain();
 var EC = require('elliptic').ec;
 var ec = new EC('secp256k1');
 var fs = require("fs");
+var colors = require('colors');
 
 var blockchainFile = fs.readFileSync("blockchain.json");
 if (JSON.parse(blockchainFile).length > 1) {
-    blockchain.replaceChain(JSON.parse(blockchainFile));
+    try {
+        blockchain.replaceChain(JSON.parse(blockchainFile));
+    } catch (e) {
+        console.log('\n\nYou are a cheat O_o ! Deleting and generating new BlockChain ...'.red.bold);
+        fs.writeFile("blockchain.json", JSON.stringify(blockchain.blockchain), "utf8", function() {});
+    }
 } else {
     fs.writeFile("blockchain.json", JSON.stringify(blockchain.blockchain), "utf8", function() {});
 }
